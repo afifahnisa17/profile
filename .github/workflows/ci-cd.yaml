@@ -1,0 +1,67 @@
+name: CI-CD Pipeline
+
+on:
+  pull_request:
+    branches: [main]
+
+  push:
+    branches: [main]
+
+jobs:
+  ci-check:
+    name: CI - Code Quality Check
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: afifah
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+          cache-dependency-path: afifah/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Lint
+        run: npm run lint || true
+
+      - name: Build Next.js
+        run: npm run build
+
+  docker-build-push:
+    name: CD - Docker Build & Push
+    needs: ci-check
+    runs-on: ubuntu-latest
+
+    # hanya jalan kalau push ke main (bukan PR)
+    if: github.event_name == 'push'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./afifah
+          push: true
+          tags: |
+            afifahnisaa/profile-web:latest
+            afifahnisaa/profile-web:${{ github.run_number }}
