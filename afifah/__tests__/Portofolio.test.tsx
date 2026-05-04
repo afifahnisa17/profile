@@ -70,9 +70,6 @@ if (targetBtn) fireEvent.click(targetBtn);
     render(<Portfolio />);
     const toggleBtn = screen.getByText(/🌙|☀️/i);
     
-    // Default awal biasanya light (cek div pembungkus)
-    const appShell = screen.getByRole('main').parentElement;
-    
     fireEvent.click(toggleBtn);
     // Cek emoji berubah atau atribut data-theme berubah
     expect(toggleBtn.textContent).toBe('☀️');

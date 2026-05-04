@@ -23,7 +23,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 22
           cache: npm
           cache-dependency-path: afifah/package-lock.json
 
@@ -31,17 +31,19 @@ jobs:
         run: npm ci
 
       - name: Run Lint
-        run: npm run lint || true
+        run: npm run lint  
 
       - name: Build Next.js
         run: npm run build
+      
+      - name: Run Unit Tests
+        run: npm test -- --coverage --watchAll=false`
 
   docker-build-push:
     name: CD - Docker Build & Push
     needs: ci-check
     runs-on: ubuntu-latest
 
-    # hanya jalan kalau push ke main (bukan PR)
     if: github.event_name == 'push'
 
     steps:
