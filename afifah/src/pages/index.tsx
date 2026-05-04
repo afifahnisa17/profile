@@ -116,7 +116,7 @@ export default function Portfolio() {
         ref={cursorRef} 
         style={{
           position: 'fixed', top: 0, left: 0, width: '22px', height: '22px',
-          border: '2px solid var(--accent)', borderRadius: '4px', // Kotak pixel style
+          border: '2px solid var(--accent)', borderRadius: '4px', 
           pointerEvents: 'none', zIndex: 99999, transition: 'transform 0.08s linear'
         }}
       />
@@ -134,6 +134,7 @@ export default function Portfolio() {
           <button 
             onClick={() => setActiveTab('project')} 
             className={`${styles.navBtn} ${activeTab === 'project' ? styles.active : ''}`}
+            data-testid="PROJECTS"
             data-label="PROJECTS"
           >
             <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
