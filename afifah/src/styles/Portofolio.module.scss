@@ -1,0 +1,215 @@
+/* --- 1. VARIABLES & THEMES --- */
+.appShell {
+  --bg: #c1dbc9; /* Sage Green */
+  --text: #1a3c34; /* Forest Green */
+  --accent: #ff6b6b; /* Coral */
+  --sidebar-bg: #1a3c34;
+  --card-bg: rgba(255, 255, 255, 0.3);
+  --glass: rgba(255, 255, 255, 0.15);
+
+  &[data-theme='dark'] {
+    --bg: #1a261f;
+    --text: #c1dbc9;
+    --accent: #f8b195;
+    --sidebar-bg: #0d1410;
+    --card-bg: rgba(26, 60, 52, 0.4);
+    --glass: rgba(0, 0, 0, 0.2);
+  }
+
+  display: flex;
+  height: 100vh;
+  padding: 15px;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  overflow: hidden;
+  transition: all 0.5s ease;
+  cursor: none !important; // Hilangkan kursor asli
+}
+
+/* --- 2. SIDEBAR --- */
+.sidebar {
+  width: 80px;
+  background: var(--sidebar-bg);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px 0;
+  position: relative;
+  z-index: 1000;
+
+  .logo {
+    font-family: 'VT323', monospace;
+    font-size: 2rem;
+    color: var(--accent);
+  }
+
+  .navLinks {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .navBtn {
+    background: none;
+    border: none;
+    width: 45px;
+    height: 45px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    svg {
+      width: 24px;
+      height: 24px;
+      opacity: 0.4;
+      transition: all 0.3s ease;
+      fill: #fff;
+    }
+
+    &:hover svg, &.active svg {
+      opacity: 1;
+      transform: scale(1.1);
+      fill: var(--accent);
+    }
+
+    &::after {
+      content: attr(data-label);
+      position: absolute;
+      left: 60px;
+      background: var(--text);
+      color: var(--bg);
+      padding: 4px 12px;
+      font-size: 0.7rem;
+      border-radius: 4px;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+      border: 1px solid var(--accent);
+      font-family: 'VT323', monospace;
+    }
+
+    &:hover::after { opacity: 1; left: 75px; }
+  }
+}
+
+/* --- 3. MAIN WINDOW --- */
+.mainWindow {
+  flex: 1;
+  margin-left: 15px;
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  border: 1px solid rgba(26, 60, 52, 0.1);
+  overflow-y: auto;
+  height: calc(100vh - 30px);
+  padding: 0 8%;
+  scroll-behavior: smooth;
+  position: relative;
+
+  &::-webkit-scrollbar { width: 6px; }
+  &::-webkit-scrollbar-thumb { background: var(--text); border-radius: 10px; }
+}
+
+/* --- 4. CONTENT STYLING --- */
+.pixelTitle { font-family: 'VT323', monospace; font-size: 4rem; line-height: 0.9; margin: 15px 0; }
+.pixelTitleSmall { font-family: 'VT323', monospace; font-size: 2.5rem; margin-bottom: 25px; }
+.roleSwitcher { font-size: 1.4rem; color: var(--accent); margin-bottom: 20px; font-weight: bold; min-height: 1.5em; }
+.badge {
+  background: var(--text);
+  color: var(--bg);
+  display: inline-flex; // Gunakan inline-flex untuk kontrol lebih baik
+  align-items: center;
+  padding: 4px 12px;
+  font-size: 0.7rem;
+  margin-bottom: 15px;
+  letter-spacing: 1px;
+  font-weight: bold;
+  
+  // Tambahkan sedikit dekorasi pixel di pojok (opsional)
+  position: relative;
+  border-left: 4px solid var(--accent); 
+  
+  // Supaya teks panjang tetap rapi di layar kecil
+  max-width: fit-content;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+.summary { max-width: 550px; line-height: 1.6; opacity: 0.9; }
+
+.techRow {
+  display: flex; gap: 8px; flex-wrap: wrap; margin-top: 25px;
+  span {
+    border: 1px solid var(--text);
+    padding: 5px 12px;
+    font-size: 0.65rem;
+    transition: 0.3s;
+    &:hover { background: var(--text); color: var(--bg); box-shadow: 4px 4px 0px var(--accent); transform: translateY(-3px); }
+  }
+}
+
+/* --- 5. GRID & CARDS --- */
+.gridContainer { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+  gap: 20px; 
+  padding-bottom: 50px;
+}
+
+.projectCard {
+  background: var(--card-bg);
+  padding: 25px;
+  border: 2px solid var(--text);
+  transition: 0.3s;
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    transform: translateY(-8px);
+    border-color: var(--accent);
+    box-shadow: 8px 8px 0px var(--text);
+  }
+
+  .cardHeader { display: flex; justify-content: space-between; font-size: 10px; font-weight: bold; margin-bottom: 10px; color: var(--accent); }
+  h3 { font-size: 1.3rem; margin-bottom: 5px; }
+  .subText { font-size: 11px; opacity: 0.7; margin-bottom: 15px; font-style: italic; }
+  
+  ul {
+    list-style: none; padding: 0; flex-grow: 1;
+    li { font-size: 0.85rem; margin-bottom: 8px; line-height: 1.4;
+      &:before { content: "» "; color: var(--accent); }
+    }
+  }
+
+  .cardTools { margin-top: 15px; padding-top: 10px; border-top: 1px solid var(--text); font-size: 10px; font-family: 'JetBrains Mono'; opacity: 0.8; }
+  .cardLink { margin-top: 15px; font-size: 11px; font-weight: bold; text-decoration: underline; cursor: pointer; color: var(--text); }
+}
+
+/* --- 6. PROJECT FILTER --- */
+.projectFilter {
+  display: flex; gap: 10px; margin-bottom: 30px; flex-wrap: wrap;
+  button {
+    background: transparent; border: 1px solid var(--text); color: var(--text);
+    padding: 6px 15px; font-size: 11px; cursor: pointer; font-family: 'JetBrains Mono';
+    &.activeFilter { background: var(--text); color: var(--bg); box-shadow: 4px 4px 0px var(--accent); }
+  }
+}
+
+/* --- 7. MOBILE RESPONSIVE --- */
+@media (max-width: 768px) {
+  .appShell { flex-direction: column; padding: 10px; cursor: auto !important; }
+  .sidebar {
+    width: 100%; height: auto; flex-direction: row; position: fixed; bottom: 10px; left: 0;
+    width: calc(100% - 20px); margin: 0 10px; padding: 10px 20px;
+    .navLinks { flex-direction: row; width: 100%; justify-content: space-around; }
+    .navBtn::after { display: none; }
+  }
+  .mainWindow { margin: 0; height: calc(100vh - 100px); padding: 40px 5%; }
+  .pixelTitle { font-size: 2.5rem; }
+  .gridContainer { grid-template-columns: 1fr; }
+}
