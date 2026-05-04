@@ -37,7 +37,7 @@ jobs:
         run: npm run build
       
       - name: Run Unit Tests
-        run: npm test -- --coverage --watchAll=false`
+        run: npm test -- --coverage --watchAll=false
 
   docker-build-push:
     name: CD - Docker Build & Push
